@@ -35,7 +35,7 @@ func main() {
   m.Map(SetupDatabase())
 
   // Get the PORT from the environment. Necessary for Heroku.
-  m.RunOnAddr(*port)
+  m.RunOnAddr(":" + *port)
 
   store := sessions.NewCookieStore([]byte("secret123"))
 
