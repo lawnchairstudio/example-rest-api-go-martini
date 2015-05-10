@@ -34,9 +34,6 @@ func main() {
 
   m.Map(SetupDatabase())
 
-  // Get the PORT from the environment. Necessary for Heroku.
-  m.RunOnAddr(":" + *port)
-
   store := sessions.NewCookieStore([]byte("secret123"))
 
   m.Use(sessions.Sessions("segment_session", store))
@@ -51,7 +48,8 @@ func main() {
   m.Get("/users/:id", Users)
   m.Get("/segments/:id", Segments)
 
-  m.Run()
+  // Get the PORT from the environment. Necessary for Heroku.
+  m.RunOnAddr(":" + *port)
 
 }
 
