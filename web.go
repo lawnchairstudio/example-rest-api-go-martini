@@ -6,6 +6,10 @@ import (
   "github.com/martini-contrib/render"
   "github.com/martini-contrib/sessions"
   "database/sql"
+  "github.com/auth0/go-jwt-middleware"
+  "encoding/base64"
+  "github.com/dgrijalva/jwt-go"
+  "net/http"
   _ "github.com/lib/pq"
 )
 
@@ -26,6 +30,16 @@ func handleError(err error) {
 
 func main() {
 
+  jwtMiddleware := jwtmiddleware.New(jwtmiddleware.Options{
+    ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
+      decoded, err := base64.URLEncoding.DecodeString("fo5kctDR_R7ys1wwl6WpSs1YmWNgGoG7VD1spH5pgdXzZT8dVHcX0W1FLKb_DaQj")
+      if err != nil {
+        return nil, err
+      }
+      return decoded, nil
+    },
+  })
+
   m := martini.Classic()
 
   port := flag.String("port", "8000", "HTTP Port")
@@ -42,11 +56,17 @@ func main() {
     IndentJSON: true, // Output human readable JSON
   }))
 
+  // for auth, just pass jwtMiddleware.CheckJWT first
+  // eg: m.Get("/", jwtMiddleware.CheckJWT, Index)
+
   m.Get("/", Index)
   m.Get("/session/new", Session)
   m.Post("/user/new", NewUser)
   m.Get("/users/:id", Users)
   m.Get("/segments/:id", Segments)
+  m.Get("/authtest", jwtMiddleware.CheckJWT, func(res http.ResponseWriter, req *http.Request) { // res and req are injected by Martini
+    res.WriteHeader(200) // HTTP 200
+  })
 
   // Get the PORT from the environment. Necessary for Heroku.
   m.RunOnAddr(":" + *port)
