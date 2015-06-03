@@ -1,4 +1,4 @@
-## Example REST API
+# Martini Example REST API [![Build Status](https://travis-ci.org/lawnchairstudios/example-rest-api-go-martini.svg)](https://travis-ci.org/lawnchairstudios/example-rest-api-go-martini)
 
 ## Getting Started
 
@@ -14,3 +14,8 @@ The recommended way to manage Go package dependencies on Heroku is with [Godep](
 
 1. Install Godep: go get github.com/kr/godep
 2. Save dependencies: `godep save`
+
+---
+Copyright 2015 Lawn Chair Studios. All rights reserved.
+
+Licensed MIT.
